@@ -22,11 +22,11 @@ export const FeatureCard = ({ icon, name, online, desc, resources }: any) => {
     >
       <Box display="flex" flexDirection="row">
         <Text>{icon}</Text>
-        <Text fontSize={22} color="$black" ml="$2">
+        <Text fontSize={22} color="$textLight900" ml="$2">
           {name}
         </Text>
         <Box display="flex" flexDirection="row" alignItems="center">
-          <Text fontSize={16} color="$black" fontWeight="$thin" ml="$2">
+          <Text fontSize={16} color="$textLight900" fontWeight="$thin" ml="$2">
             {online ? "Online" : "Offline"}
           </Text>
           <Text ml="$2">
@@ -43,17 +43,43 @@ export const FeatureCard = ({ icon, name, online, desc, resources }: any) => {
             disk: number;
             network: number;
           }) => (
-            <Box key={resource.id} display="flex" flexDirection="row">
-              <Text fontSize={16} color="$black" fontWeight="$thin">
+            <Box
+              key={resource.id}
+              display="flex"
+              flexWrap="wrap"
+              flexDirection="row"
+              justifyContent="center"
+            >
+              <Text
+                fontSize={16}
+                color="$textLight900"
+                fontWeight="$normal"
+                p="$1"
+              >
                 CPU: {resource.cpu}%
               </Text>
-              <Text fontSize={16} color="$black" fontWeight="$thin" ml="$2">
+              <Text
+                fontSize={16}
+                color="$textLight900"
+                fontWeight="$normal"
+                p="$1"
+              >
                 Memoria: {resource.memory}%
               </Text>
-              <Text fontSize={16} color="$black" fontWeight="$thin" ml="$2">
+              <Text
+                fontSize={16}
+                color="$textLight900"
+                fontWeight="$normal"
+                p="$1"
+              >
                 Disco: {resource.disk}%
               </Text>
-              <Text fontSize={16} color="$black" fontWeight="$thin" ml="$2">
+              <Text
+                fontSize={16}
+                color="$textLight900"
+                fontWeight="$normal"
+                p="$1"
+              >
                 Consumo: {resource.network} MB/s
               </Text>
             </Box>

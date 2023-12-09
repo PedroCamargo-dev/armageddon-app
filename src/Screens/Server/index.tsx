@@ -1,15 +1,8 @@
 import { Box, Pressable, ScrollView } from "@gluestack-ui/themed";
 import { Feather } from "@expo/vector-icons";
 import { FeatureCard } from "../../components/FeatureCard";
-import { useNavigation } from "@react-navigation/native";
 
-export const ServersScreen = () => {
-  return <Container />;
-};
-
-const Container = () => {
-  const navigation = useNavigation();
-
+export const ServerScreen = () => {
   return (
     <Box flex={1} backgroundColor="$white">
       <ScrollView
@@ -44,9 +37,7 @@ const Container = () => {
             }}
           >
             <Pressable
-              onPress={() =>
-                navigation.navigate("ServerScreen", { name: "Cluster 1" })
-              }
+              onPress={() => console.log("Hello")}
               sx={{ ":pressed": { bg: "$amber100" } }}
             >
               <FeatureCard
