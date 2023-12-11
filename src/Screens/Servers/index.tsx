@@ -2,13 +2,32 @@ import { Box, Pressable, ScrollView } from "@gluestack-ui/themed";
 import { Feather } from "@expo/vector-icons";
 import { FeatureCard } from "../../components/FeatureCard";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import Axios from "axios";
 
 export const ServersScreen = () => {
-  return <Container />;
-};
-
-const Container = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await Axios.get("http://127.0.0.1:3001/getServers");
+
+        console.log(response);
+
+        setData(response.data);
+        setLoading(false);
+      } catch (e) {
+        setError(e);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Box flex={1} backgroundColor="$white">
