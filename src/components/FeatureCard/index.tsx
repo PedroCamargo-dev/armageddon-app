@@ -48,7 +48,7 @@ export const FeatureCard = ({ icon, name, online, desc, resources }: any) => {
               display="flex"
               flexWrap="wrap"
               flexDirection="row"
-              justifyContent="center"
+              justifyContent="flex-start"
             >
               <Text
                 fontSize={16}
@@ -73,14 +73,6 @@ export const FeatureCard = ({ icon, name, online, desc, resources }: any) => {
                 p="$1"
               >
                 Disco: {resource.disk}%
-              </Text>
-              <Text
-                fontSize={16}
-                color="$textLight900"
-                fontWeight="$normal"
-                p="$1"
-              >
-                Consumo: {resource.network} MB/s
               </Text>
             </Box>
           )
