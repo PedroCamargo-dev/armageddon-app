@@ -25,9 +25,6 @@
       },
       "package": "com.pedrocamargo3008.armageddon"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
     "extra": {
       "eas": {
         "projectId": "d04a1104-7086-46cc-8f8e-ac7571751dd2"
