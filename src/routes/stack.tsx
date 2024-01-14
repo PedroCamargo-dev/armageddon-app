@@ -11,7 +11,10 @@ export function StackNavigator() {
       <Stack.Navigator>
         <Stack.Screen
           name="TabNavigator"
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            title: "Voltar",
+          }}
           component={TabNavigator}
         />
         <Stack.Screen
