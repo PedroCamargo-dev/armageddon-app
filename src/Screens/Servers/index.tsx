@@ -9,9 +9,25 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { FeatureCard } from "../../components/FeatureCard";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { getRequest } from "../../http/axios";
+import { FormatBytes } from "../../utils/convert/formatBytes";
 
 export const ServersScreen = () => {
   const navigation = useNavigation();
+  const [test, setTest] = useState<any>([]);
+
+  useEffect(() => {
+    const getServers = async () => {
+      const response = await getRequest("system/metrics");
+      console.log(response.data);
+      setTest(response.data);
+    };
+
+    getServers();
+  }, []);
+
+  console.log(test.map((item) => item.name));
 
   return (
     <Box flex={1} backgroundColor="$white">
@@ -46,90 +62,30 @@ export const ServersScreen = () => {
               },
             }}
           >
-            <Pressable
-              onPress={() =>
-                navigation.navigate("ServerScreen", { name: "Cluster 1" })
-              }
-              sx={{ ":pressed": { bg: "$amber100" } }}
-            >
-              <FeatureCard
-                icon={<Feather name="server" size={24} color="black" />}
-                name="Cluster 1"
-                desc="Find in-depth information about gluestack features and API."
-                online={true}
-                resources={[
-                  {
-                    id: 1,
-                    cpu: 20,
-                    memory: 40,
-                    disk: 60,
-                  },
-                ]}
-              />
-            </Pressable>
-            <Pressable
-              onPress={() =>
-                navigation.navigate("ServerScreen", { name: "Cluster 1" })
-              }
-              sx={{ ":pressed": { bg: "$amber100" } }}
-            >
-              <FeatureCard
-                icon={<Feather name="server" size={24} color="black" />}
-                name="Cluster 1"
-                desc="Find in-depth information about gluestack features and API."
-                online={true}
-                resources={[
-                  {
-                    id: 1,
-                    cpu: 20,
-                    memory: 40,
-                    disk: 60,
-                  },
-                ]}
-              />
-            </Pressable>
-            <Pressable
-              onPress={() =>
-                navigation.navigate("ServerScreen", { name: "Cluster 1" })
-              }
-              sx={{ ":pressed": { bg: "$amber100" } }}
-            >
-              <FeatureCard
-                icon={<Feather name="server" size={24} color="black" />}
-                name="Cluster 1"
-                desc="Find in-depth information about gluestack features and API."
-                online={true}
-                resources={[
-                  {
-                    id: 1,
-                    cpu: 20,
-                    memory: 40,
-                    disk: 60,
-                  },
-                ]}
-              />
-            </Pressable>
-            <Pressable
-              onPress={() =>
-                navigation.navigate("ServerScreen", { name: "Cluster 1" })
-              }
-              sx={{ ":pressed": { bg: "$amber100" } }}
-            >
-              <FeatureCard
-                icon={<Feather name="server" size={24} color="black" />}
-                name="Cluster 1"
-                desc="Find in-depth information about gluestack features and API."
-                online={true}
-                resources={[
-                  {
-                    id: 1,
-                    cpu: 20,
-                    memory: 40,
-                    disk: 60,
-                  },
-                ]}
-              />
-            </Pressable>
+            {test.map((item, i: number) => (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("ServerScreen", { name: item.name })
+                }
+                sx={{ ":pressed": { bg: "$amber100" } }}
+                key={item.id}
+              >
+                <FeatureCard
+                  icon={<Feather name="server" size={24} color="black" />}
+                  name={item.name}
+                  desc="Find in-depth information about gluestack features and API."
+                  online={true}
+                  resources={[
+                    {
+                      id: item.id,
+                      cpu: item.CPU[0].currentLoad,
+                      memory: FormatBytes(item.memories[0].used),
+                      disk: 1,
+                    },
+                  ]}
+                />
+              </Pressable>
+            ))}
           </Box>
         </Box>
       </ScrollView>
