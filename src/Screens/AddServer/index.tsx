@@ -6,8 +6,6 @@ import {
   ScrollView,
   Textarea,
   TextareaInput,
-} from "@gluestack-ui/themed";
-import {
   ButtonText,
   VStack,
   Button,
@@ -16,22 +14,99 @@ import {
   FormControlLabelText,
   Input,
   InputField,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  Switch,
-  HStack,
   Box,
+  Toast,
+  ToastTitle,
+  ToastDescription,
 } from "@gluestack-ui/themed";
 import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 import { useState } from "react";
+import { postRequest } from "../../http/axios";
+import { useToast } from "@gluestack-ui/themed";
+
+interface FormData {
+  name: string;
+  description: string;
+  username: string;
+  password: string;
+  IP: string;
+  portSSH: number;
+  portSocket: number;
+  status: string;
+}
 
 export function AddServer() {
+  const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
+
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    description: "",
+    username: "",
+    password: "",
+    IP: "",
+    portSSH: 0,
+    portSocket: 0,
+    status: "Online",
+  });
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await postRequest<FormData>("system", {
+        ...formData,
+        portSSH: parseInt(formData.portSSH.toString()),
+        portSocket: parseInt(formData.portSocket.toString()),
+      });
+
+      console.log(response);
+      console.log(response.status);
+      console.log(response.status === 201);
+
+      if (response.status === 201) {
+        toast.show({
+          placement: "top",
+          render: ({ id }) => {
+            const toastId = "toast-" + id;
+            return (
+              <Toast nativeID={toastId} action="success">
+                <VStack space="xs">
+                  <ToastTitle>Sucesso!</ToastTitle>
+                  <ToastDescription>
+                    Estamos "startando a API no server".
+                  </ToastDescription>
+                </VStack>
+              </Toast>
+            );
+          },
+        });
+      }
+    } catch (error) {
+      toast.show({
+        placement: "top",
+        render: ({ id }) => {
+          const toastId = "toast-" + id;
+          return (
+            <Toast nativeID={toastId} action="error">
+              <VStack space="xs">
+                <ToastTitle>Erro!</ToastTitle>
+                <ToastDescription>Deu ruim</ToastDescription>
+              </VStack>
+            </Toast>
+          );
+        },
+      });
+    }
   };
 
   return (
@@ -54,28 +129,39 @@ export function AddServer() {
               },
             }}
           >
-            <FormControl>
+            <FormControl isRequired>
               <FormControlLabel>
                 <FormControlLabelText>Nome</FormControlLabelText>
               </FormControlLabel>
               <Input>
-                <InputField placeholder="Cluster-1" />
+                <InputField
+                  onChangeText={(name) => handleChange("name", name)}
+                  placeholder="Cluster-1"
+                />
               </Input>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormControlLabel>
                 <FormControlLabelText>Usuário</FormControlLabelText>
               </FormControlLabel>
               <Input>
-                <InputField placeholder="pedrocamargo" />
+                <InputField
+                  onChangeText={(username) =>
+                    handleChange("username", username)
+                  }
+                  placeholder="pedrocamargo"
+                />
               </Input>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormControlLabel>
                 <FormControlLabelText>Senha</FormControlLabelText>
               </FormControlLabel>
               <Input>
                 <InputField
+                  onChangeText={(password) =>
+                    handleChange("password", password)
+                  }
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••••"
                 />
@@ -84,28 +170,44 @@ export function AddServer() {
                 </InputSlot>
               </Input>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormControlLabel>
                 <FormControlLabelText>IP</FormControlLabelText>
               </FormControlLabel>
               <Input>
-                <InputField keyboardType="numeric" placeholder="192.168.1.11" />
+                <InputField
+                  onChangeText={(IP) => handleChange("IP", IP)}
+                  keyboardType="numbers-and-punctuation"
+                  placeholder="192.168.1.11"
+                />
               </Input>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormControlLabel>
                 <FormControlLabelText>Porta SSH</FormControlLabelText>
               </FormControlLabel>
               <Input>
-                <InputField keyboardType="numeric" placeholder="22" />
+                <InputField
+                  onChangeText={(portSSH) =>
+                    handleChange("portSSH", portSSH.toString())
+                  }
+                  keyboardType="numeric"
+                  placeholder="22"
+                />
               </Input>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormControlLabel>
                 <FormControlLabelText>Porta Socket</FormControlLabelText>
               </FormControlLabel>
               <Input>
-                <InputField keyboardType="numeric" placeholder="3000" />
+                <InputField
+                  onChangeText={(portSocket) =>
+                    handleChange("portSocket", portSocket.toString())
+                  }
+                  keyboardType="numeric"
+                  placeholder="3000"
+                />
               </Input>
             </FormControl>
             <FormControl>
@@ -113,13 +215,29 @@ export function AddServer() {
                 <FormControlLabelText>Descrição</FormControlLabelText>
               </FormControlLabel>
               <Textarea>
-                <TextareaInput placeholder="Servidor NAS" />
+                <TextareaInput
+                  onChangeText={(description) =>
+                    handleChange("description", description)
+                  }
+                  placeholder="Servidor NAS"
+                />
               </Textarea>
               <FormControlHelper>
                 <FormControlHelperText>
                   Descreva o servidor
                 </FormControlHelperText>
               </FormControlHelper>
+            </FormControl>
+            <FormControl>
+              <Button
+                size="md"
+                variant="solid"
+                action="primary"
+                onPress={handleSubmit}
+                style={{ marginTop: 20, marginBottom: 50 }}
+              >
+                <ButtonText>Criar </ButtonText>
+              </Button>
             </FormControl>
           </Box>
         </ScrollView>

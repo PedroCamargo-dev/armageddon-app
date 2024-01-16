@@ -56,7 +56,7 @@ export const FeatureCard = ({ icon, name, online, desc, resources }: any) => {
                 fontWeight="$normal"
                 p="$1"
               >
-                CPU: {resource.cpu}%
+                CPU: {resource.cpu} %
               </Text>
               <Text
                 fontSize={16}
@@ -64,7 +64,7 @@ export const FeatureCard = ({ icon, name, online, desc, resources }: any) => {
                 fontWeight="$normal"
                 p="$1"
               >
-                Memoria: {resource.memory}%
+                Memória: {resource.memory}
               </Text>
               <Text
                 fontSize={16}

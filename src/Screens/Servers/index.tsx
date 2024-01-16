@@ -27,7 +27,7 @@ export const ServersScreen = () => {
     getServers();
   }, []);
 
-  console.log(test.map((item) => item.name));
+  console.log(test.map((item) => item.CPU[0]));
 
   return (
     <Box flex={1} backgroundColor="$white">
@@ -78,8 +78,8 @@ export const ServersScreen = () => {
                   resources={[
                     {
                       id: item.id,
-                      cpu: item.CPU[0].currentLoad,
-                      memory: FormatBytes(item.memories[0].used),
+                      cpu: item.CPU[0]?.currentLoad.toFixed(2) ?? 0,
+                      memory: FormatBytes(item.memories[0]?.used ?? 0),
                       disk: 1,
                     },
                   ]}
